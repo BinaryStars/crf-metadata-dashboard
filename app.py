@@ -134,7 +134,7 @@ elif section == "Terminology Compliance":
         st.success("All AEDECOD entries are compliant.")
     else:
         st.warning("Non-compliant AEDECOD terms with suggestions:")
-        show_noncompliant(unmatched_ae, "AEDECOD", controlled_terms["AEDECOD"])
+        show_noncompliant(unmatched_ae, "AEDECOD", get_allowed_terms("AEDECOD"))
 
     st.subheader("Check SEX (Demographics)")
     unmatched_sex = noncompliant[~noncompliant["SEX"].isin(get_allowed_terms("SEX"))]
@@ -142,7 +142,7 @@ elif section == "Terminology Compliance":
         st.success("All SEX entries are compliant.")
     else:
         st.warning("Non-compliant SEX entries with suggestions:")
-        show_noncompliant(unmatched_sex, "SEX", controlled_terms["SEX"])
+        show_noncompliant(unmatched_sex, "SEX", get_allowed_terms("SEX"))
 
     st.subheader("Check LABTEST (Lab Data)")
     unmatched_labtest = noncompliant[~noncompliant["LABTEST"].isin(get_allowed_terms("LABTEST"))]
@@ -150,4 +150,4 @@ elif section == "Terminology Compliance":
         st.success("All LABTEST entries are compliant.")
     else:
         st.warning("Non-compliant LABTEST entries with suggestions:")
-        show_noncompliant(unmatched_labtest, "LABTEST", controlled_terms["LABTEST"])
+        show_noncompliant(unmatched_labtest, "LABTEST", get_allowed_terms("LABTEST"))
