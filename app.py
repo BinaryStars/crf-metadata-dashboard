@@ -22,12 +22,11 @@ filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
 
 noncompliant = pd.read_csv(DATA_DIR + "filled_crf_noncompliant_sample.csv")
 
-# Mock SDTM/CDISC terminology
-controlled_terms = {
-    "AEDECOD": ["HEADACHE", "NAUSEA", "FATIGUE"],
-    "SEX": ["MALE", "FEMALE"],
-    "LABTEST": ["HEMOGLOBIN", "GLUCOSE", "WBC"]
-}
+# Load full CDISC terminology
+cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
+
+def get_allowed_terms(codelist):
+    return cdisc_terms_df[cdisc_terms_df["CODELIST"] == codelist]["VALUE"].dropna().unique().tolist()
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
@@ -130,7 +129,7 @@ elif section == "Terminology Compliance":
             st.dataframe(styled)
 
     st.subheader("Check AEDECOD (Adverse Events)")
-    unmatched_ae = noncompliant[~noncompliant["AEDECOD"].isin(controlled_terms["AEDECOD"])]
+    unmatched_ae = noncompliant[~noncompliant["AEDECOD"].isin(get_allowed_terms("AEDECOD"))]
     if unmatched_ae.empty:
         st.success("All AEDECOD entries are compliant.")
     else:
@@ -138,7 +137,7 @@ elif section == "Terminology Compliance":
         show_noncompliant(unmatched_ae, "AEDECOD", controlled_terms["AEDECOD"])
 
     st.subheader("Check SEX (Demographics)")
-    unmatched_sex = noncompliant[~noncompliant["SEX"].isin(controlled_terms["SEX"])]
+    unmatched_sex = noncompliant[~noncompliant["SEX"].isin(get_allowed_terms("SEX"))]
     if unmatched_sex.empty:
         st.success("All SEX entries are compliant.")
     else:
@@ -146,7 +145,7 @@ elif section == "Terminology Compliance":
         show_noncompliant(unmatched_sex, "SEX", controlled_terms["SEX"])
 
     st.subheader("Check LABTEST (Lab Data)")
-    unmatched_labtest = noncompliant[~noncompliant["LABTEST"].isin(controlled_terms["LABTEST"])]
+    unmatched_labtest = noncompliant[~noncompliant["LABTEST"].isin(get_allowed_terms("LABTEST"))]
     if unmatched_labtest.empty:
         st.success("All LABTEST entries are compliant.")
     else:
