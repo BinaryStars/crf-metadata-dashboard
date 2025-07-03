@@ -82,15 +82,23 @@ elif section == "ClinicalTrials.gov Explorer":
 
     query = st.text_input("Search ClinicalTrials.gov (e.g., diabetes, COVID-19, oncology):")
     if query:
-        url = f"https://clinicaltrials.gov/api/query/study_fields?expr={query}&fields=NCTId,Condition,BriefTitle,StartDate,Phase&min_rnk=1&max_rnk=10&fmt=json"
-        response = requests.get(url)
-        if response.status_code == 200:
-            results = response.json()["StudyFieldsResponse"]["StudyFields"]
-            trials = pd.DataFrame(results)
-            if not trials.empty:
-                st.write(f"Showing top {len(trials)} trials for '{query}':")
-                st.dataframe(trials)
+        url = f"https://clinicaltrials.gov/api/v1/studies?term={query}&limit=10"
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            studies = data.get("studies", [])
+
+            if studies:
+                df = pd.DataFrame([{
+                    "NCT ID": s.get("nctId"),
+                    "Title": s.get("briefTitle"),
+                    "Condition": ", ".join(s.get("conditions", [])),
+                    "Phase": s.get("phase"),
+                    "Start Date": s.get("startDate")
+                } for s in studies])
+                st.dataframe(df)
             else:
                 st.info("No results found.")
-        else:
-            st.error("Failed to retrieve data from ClinicalTrials.gov")
+        except requests.exceptions.RequestException as e:
+            st.error(f"Error contacting ClinicalTrials.gov: {e}")
