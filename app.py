@@ -105,31 +105,40 @@ elif section == "Terminology Compliance":
     st.title("Terminology Compliance Check")
     st.markdown("This tool checks whether filled CRF terms align with SDTM/CDISC controlled terminology.")
 
-    def check_terms(df, column, allowed_terms):
+    def highlight_noncompliant(val, allowed):
+        return f"color: red; font-weight: bold" if val not in allowed else ""
+
+    def show_noncompliant(df, column, allowed_terms):
         if column in df.columns:
-            return df[~df[column].isin(allowed_terms)]
-        return pd.DataFrame()
+            df_copy = df[["SUBJID", column]].copy()
+            suggestions = []
+            for val in df_copy[column]:
+                match = next((term for term in allowed_terms if term.lower() in val.lower()), "(no suggestion)")
+                suggestions.append(match if match else "(no suggestion)")
+            df_copy["Suggested Correction"] = suggestions
+            styled = df_copy.style.applymap(lambda v: highlight_noncompliant(v, allowed_terms), subset=[column])
+            st.dataframe(styled)
 
     st.subheader("Check AEDECOD (Adverse Events)")
-    unmatched_ae = check_terms(noncompliant, "AEDECOD", controlled_terms["AEDECOD"])
+    unmatched_ae = noncompliant[~noncompliant["AEDECOD"].isin(controlled_terms["AEDECOD"])]
     if unmatched_ae.empty:
         st.success("All AEDECOD entries are compliant.")
     else:
-        st.warning("Non-compliant AEDECOD terms:")
-        st.dataframe(unmatched_ae[["SUBJID", "AEDECOD"]])
+        st.warning("Non-compliant AEDECOD terms with suggestions:")
+        show_noncompliant(unmatched_ae, "AEDECOD", controlled_terms["AEDECOD"])
 
     st.subheader("Check SEX (Demographics)")
-    unmatched_sex = check_terms(noncompliant, "SEX", controlled_terms["SEX"])
+    unmatched_sex = noncompliant[~noncompliant["SEX"].isin(controlled_terms["SEX"])]
     if unmatched_sex.empty:
         st.success("All SEX entries are compliant.")
     else:
-        st.warning("Non-compliant SEX entries:")
-        st.dataframe(unmatched_sex[["SUBJID", "SEX"]])
+        st.warning("Non-compliant SEX entries with suggestions:")
+        show_noncompliant(unmatched_sex, "SEX", controlled_terms["SEX"])
 
     st.subheader("Check LABTEST (Lab Data)")
-    unmatched_labtest = check_terms(noncompliant, "LABTEST", controlled_terms["LABTEST"])
+    unmatched_labtest = noncompliant[~noncompliant["LABTEST"].isin(controlled_terms["LABTEST"])]
     if unmatched_labtest.empty:
         st.success("All LABTEST entries are compliant.")
     else:
-        st.warning("Non-compliant LABTEST entries:")
-        st.dataframe(unmatched_labtest[["SUBJID", "LABTEST"]])
+        st.warning("Non-compliant LABTEST entries with suggestions:")
+        show_noncompliant(unmatched_labtest, "LABTEST", controlled_terms["LABTEST"])
