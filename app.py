@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 import urllib.parse
+import difflib
 
 # Data directory
 DATA_DIR = "crf_metadata_csvs/"
@@ -112,9 +113,18 @@ elif section == "Terminology Compliance":
         if column in df.columns:
             df_copy = df[["SUBJID", column]].copy()
             suggestions = []
+
+            allowed_terms_lower = [term.lower() for term in allowed_terms]
+            allowed_term_map = dict(zip(allowed_terms_lower, allowed_terms))
+
             for val in df_copy[column]:
-                match = next((term for term in allowed_terms if term.lower() in val.lower()), "(no suggestion)")
-                suggestions.append(match if match else "(no suggestion)")
+                val_lower = val.lower()
+                matches = difflib.get_close_matches(val_lower, allowed_terms_lower, n=1, cutoff=0.3)
+                if matches:
+                    suggestions.append(allowed_term_map[matches[0]])
+                else:
+                    suggestions.append("(no suggestion)")
+
             df_copy["Suggested Correction"] = suggestions
             styled = df_copy.style.applymap(lambda v: highlight_noncompliant(v, allowed_terms), subset=[column])
             st.dataframe(styled)
