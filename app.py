@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
+import urllib.parse
 
 # Data directory
 DATA_DIR = "crf_metadata_csvs/"
@@ -82,9 +83,11 @@ elif section == "ClinicalTrials.gov Explorer":
 
     query = st.text_input("Search ClinicalTrials.gov (e.g., diabetes, COVID-19, oncology):")
     if query:
-        url = f"https://clinicaltrials.gov/api/query/study_fields?expr={query}&fields=NCTId,Condition,BriefTitle,StartDate,Phase&min_rnk=1&max_rnk=10&fmt=json"
+        safe_query = urllib.parse.quote(query)
+        url = f"https://clinicaltrials.gov/api/query/study_fields?expr={safe_query}&fields=NCTId,Condition,BriefTitle,StartDate,Phase&min_rnk=1&max_rnk=10&fmt=json"
+        headers = {"User-Agent": "Mozilla/5.0"}
         try:
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, headers=headers, timeout=10)
             response.raise_for_status()
             data = response.json()
             studies = data.get("StudyFieldsResponse", {}).get("StudyFields", [])
