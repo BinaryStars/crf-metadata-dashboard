@@ -82,20 +82,20 @@ elif section == "ClinicalTrials.gov Explorer":
 
     query = st.text_input("Search ClinicalTrials.gov (e.g., diabetes, COVID-19, oncology):")
     if query:
-        url = f"https://clinicaltrials.gov/api/v1/studies?term={query}&limit=10"
+        url = f"https://clinicaltrials.gov/api/query/study_fields?expr={query}&fields=NCTId,Condition,BriefTitle,StartDate,Phase&min_rnk=1&max_rnk=10&fmt=json"
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
             data = response.json()
-            studies = data.get("studies", [])
+            studies = data.get("StudyFieldsResponse", {}).get("StudyFields", [])
 
             if studies:
-                df = pd.DataFrame([{
-                    "NCT ID": s.get("nctId"),
-                    "Title": s.get("briefTitle"),
-                    "Condition": ", ".join(s.get("conditions", [])),
-                    "Phase": s.get("phase"),
-                    "Start Date": s.get("startDate")
+                df = pd.DataFrame([{ 
+                    "NCT ID": s.get("NCTId", [""])[0],
+                    "Title": s.get("BriefTitle", [""])[0],
+                    "Condition": ", ".join(s.get("Condition", [])),
+                    "Phase": s.get("Phase", [""])[0],
+                    "Start Date": s.get("StartDate", [""])[0]
                 } for s in studies])
                 st.dataframe(df)
             else:
