@@ -1,18 +1,21 @@
 import streamlit as st
 import pandas as pd
 
+# Data directory
+DATA_DIR = "crf_metadata_csvs/"
+
 # Load data
-crf_ae = pd.read_csv("crf_ae_sample.csv")
-crf_demo = pd.read_csv("crf_demographics_sample.csv")
-crf_lab = pd.read_csv("crf_lab_sample.csv")
+crf_ae = pd.read_csv(DATA_DIR + "crf_ae_sample.csv")
+crf_demo = pd.read_csv(DATA_DIR + "crf_demographics_sample.csv")
+crf_lab = pd.read_csv(DATA_DIR + "crf_lab_sample.csv")
 
-metadata_ae = pd.read_csv("metadata_repository_sample.csv")
-metadata_demo = pd.read_csv("metadata_demographics_sample.csv")
-metadata_lab = pd.read_csv("metadata_lab_sample.csv")
+metadata_ae = pd.read_csv(DATA_DIR + "metadata_repository_sample.csv")
+metadata_demo = pd.read_csv(DATA_DIR + "metadata_demographics_sample.csv")
+metadata_lab = pd.read_csv(DATA_DIR + "metadata_lab_sample.csv")
 
-filled_ae = pd.read_csv("filled_crf_ae_sample.csv")
-filled_demo = pd.read_csv("filled_crf_demographics_sample.csv")
-filled_lab = pd.read_csv("filled_crf_lab_sample.csv")
+filled_ae = pd.read_csv(DATA_DIR + "filled_crf_ae_sample.csv")
+filled_demo = pd.read_csv(DATA_DIR + "filled_crf_demographics_sample.csv")
+filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
@@ -69,4 +72,3 @@ elif section == "Metadata Repository":
     with tab3:
         st.subheader("Lab Metadata")
         st.dataframe(metadata_lab)
-
