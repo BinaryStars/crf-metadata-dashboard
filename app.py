@@ -19,9 +19,16 @@ filled_ae = pd.read_csv(DATA_DIR + "filled_crf_ae_sample.csv")
 filled_demo = pd.read_csv(DATA_DIR + "filled_crf_demographics_sample.csv")
 filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
 
+# Mock SDTM/CDISC terminology
+controlled_terms = {
+    "AEDECOD": ["HEADACHE", "NAUSEA", "FATIGUE"],
+    "SEX": ["MALE", "FEMALE"],
+    "LABTEST": ["HEMOGLOBIN", "GLUCOSE", "WBC"]
+}
+
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
-section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer"])
+section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer", "Terminology Compliance"])
 
 # Overview
 if section == "Overview":
@@ -32,6 +39,7 @@ if section == "Overview":
     - Metadata repositories with terminology, data types, and change tracking
     - Filled CRFs simulating study data
     - Integration with ClinicalTrials.gov for external metadata alignment
+    - SDTM/CDISC terminology validation to support data governance
     """)
 
 # CRF Structures
@@ -86,3 +94,37 @@ elif section == "ClinicalTrials.gov Explorer":
         search_url = f"https://clinicaltrials.gov/search?cond={urllib.parse.quote(query)}"
         st.markdown(f"[Click here to view ClinicalTrials.gov results for '{query}']({search_url})")
         st.markdown("(This opens the official site in a new tab.)")
+
+# Terminology Compliance
+elif section == "Terminology Compliance":
+    st.title("Terminology Compliance Check")
+    st.markdown("This tool checks whether filled CRF terms align with SDTM/CDISC controlled terminology.")
+
+    def check_terms(df, column, allowed_terms):
+        if column in df.columns:
+            return df[~df[column].isin(allowed_terms)]
+        return pd.DataFrame()
+
+    st.subheader("Check AEDECOD (Adverse Events)")
+    unmatched_ae = check_terms(filled_ae, "AEDECOD", controlled_terms["AEDECOD"])
+    if unmatched_ae.empty:
+        st.success("All AEDECOD entries are compliant.")
+    else:
+        st.warning("Non-compliant AEDECOD terms:")
+        st.dataframe(unmatched_ae[["SUBJID", "AEDECOD"]])
+
+    st.subheader("Check SEX (Demographics)")
+    unmatched_sex = check_terms(filled_demo, "SEX", controlled_terms["SEX"])
+    if unmatched_sex.empty:
+        st.success("All SEX entries are compliant.")
+    else:
+        st.warning("Non-compliant SEX entries:")
+        st.dataframe(unmatched_sex[["SUBJID", "SEX"]])
+
+    st.subheader("Check LABTEST (Lab Data)")
+    unmatched_labtest = check_terms(filled_lab, "LABTEST", controlled_terms["LABTEST"])
+    if unmatched_labtest.empty:
+        st.success("All LABTEST entries are compliant.")
+    else:
+        st.warning("Non-compliant LABTEST entries:")
+        st.dataframe(unmatched_labtest[["SUBJID", "LABTEST"]])
