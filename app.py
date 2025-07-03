@@ -83,25 +83,6 @@ elif section == "ClinicalTrials.gov Explorer":
 
     query = st.text_input("Search ClinicalTrials.gov (e.g., diabetes, COVID-19, oncology):")
     if query:
-        safe_query = urllib.parse.quote(query)
-        url = f"https://clinicaltrials.gov/api/query/study_fields?expr={safe_query}&fields=NCTId,Condition,BriefTitle,StartDate,Phase&min_rnk=1&max_rnk=10&fmt=json"
-        headers = {"User-Agent": "Mozilla/5.0"}
-        try:
-            response = requests.get(url, headers=headers, timeout=10)
-            response.raise_for_status()
-            data = response.json()
-            studies = data.get("StudyFieldsResponse", {}).get("StudyFields", [])
-
-            if studies:
-                df = pd.DataFrame([{ 
-                    "NCT ID": s.get("NCTId", [""])[0],
-                    "Title": s.get("BriefTitle", [""])[0],
-                    "Condition": ", ".join(s.get("Condition", [])),
-                    "Phase": s.get("Phase", [""])[0],
-                    "Start Date": s.get("StartDate", [""])[0]
-                } for s in studies])
-                st.dataframe(df)
-            else:
-                st.info("No results found.")
-        except requests.exceptions.RequestException as e:
-            st.error(f"Error contacting ClinicalTrials.gov: {e}")
+        search_url = f"https://clinicaltrials.gov/search?cond={urllib.parse.quote(query)}"
+        st.markdown(f"[Click here to view ClinicalTrials.gov results for '{query}']({search_url})")
+        st.markdown("(This opens the official site in a new tab.)")
