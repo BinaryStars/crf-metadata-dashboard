@@ -30,7 +30,7 @@ def get_allowed_terms(codelist):
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
-section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer", "Terminology Compliance"])
+section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer", "Terminology Compliance", "Indication-Level CRF Library"])
 
 # Overview
 if section == "Overview":
@@ -99,6 +99,52 @@ elif section == "ClinicalTrials.gov Explorer":
         search_url = f"https://clinicaltrials.gov/search?cond={urllib.parse.quote(query)}"
         st.markdown(f"[Click here to view ClinicalTrials.gov results for '{query}']({search_url})")
         st.markdown("(This opens the official site in a new tab.)")
+
+# Indication-Level CRF Library
+elif section == "Indication-Level CRF Library":
+    st.title("Standardized CRF Library by Indication")
+    st.markdown("""
+    This section simulates the design of indication-specific CRF libraries using both global standards (CDISC/SDTM) and custom content.
+    Below are example CRFs for Oncology and Cardiology, along with documentation of their structure and implementation notes.
+    """)
+
+    # Oncology CRF example
+    st.subheader("Oncology CRF Template")
+    oncology_crf = pd.DataFrame({
+        "Field Name": ["SUBJID", "VISIT", "TUMOR_LOCATION", "TUMOR_SIZE", "RESPONSE"],
+        "Label": ["Subject ID", "Visit", "Tumor Location", "Tumor Size (cm)", "Response Assessment"],
+        "Data Type": ["String", "String", "String", "Float", "Categorical"],
+        "Controlled Terms": ["", "", "LUNG|BREAST|COLON", "", "PR|CR|SD|PD"],
+        "Implementation Notes": [
+            "Use consistent SUBJID across all domains",
+            "VISIT should align with CDASH standard",
+            "Use indication-specific tumor sites",
+            "Capture largest diameter in cm",
+            "Follow RECIST criteria for response"
+        ]
+    })
+    st.dataframe(oncology_crf)
+
+    # Cardiology CRF example
+    st.subheader("Cardiology CRF Template")
+    cardio_crf = pd.DataFrame({
+        "Field Name": ["SUBJID", "VISIT", "ECG_RESULT", "BP_SYSTOLIC", "BP_DIASTOLIC"],
+        "Label": ["Subject ID", "Visit", "ECG Result", "Systolic BP", "Diastolic BP"],
+        "Data Type": ["String", "String", "Categorical", "Integer", "Integer"],
+        "Controlled Terms": ["", "", "NORMAL|ABNORMAL", "", ""],
+        "Implementation Notes": [
+            "Subject ID must match DM domain",
+            "Standard visit labels (e.g., SCREENING, WEEK 1)",
+            "Use site cardiologist evaluation",
+            "Measured in mmHg",
+            "Measured in mmHg"
+        ]
+    })
+    st.dataframe(cardio_crf)
+
+    st.markdown("""
+    ✅ These examples simulate how a CRF library can be **reused and adapted across therapeutic areas**, and how decisions can be documented clearly to support data quality, traceability, and alignment with global standards.
+    """)
 
 # Terminology Compliance
 elif section == "Terminology Compliance":
