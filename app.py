@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import requests
 
 # Data directory
 DATA_DIR = "crf_metadata_csvs/"
@@ -19,7 +20,7 @@ filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
-section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository"])
+section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer"])
 
 # Overview
 if section == "Overview":
@@ -29,6 +30,7 @@ if section == "Overview":
     - Standardized CRFs for Adverse Events, Demographics, and Lab Results
     - Metadata repositories with terminology, data types, and change tracking
     - Filled CRFs simulating study data
+    - Integration with ClinicalTrials.gov for external metadata alignment
     """)
 
 # CRF Structures
@@ -72,3 +74,23 @@ elif section == "Metadata Repository":
     with tab3:
         st.subheader("Lab Metadata")
         st.dataframe(metadata_lab)
+
+# ClinicalTrials.gov Integration
+elif section == "ClinicalTrials.gov Explorer":
+    st.title("ClinicalTrials.gov Metadata Explorer")
+    st.markdown("Search trials to cross-reference CRF content with real-world study metadata.")
+
+    query = st.text_input("Search ClinicalTrials.gov (e.g., diabetes, COVID-19, oncology):")
+    if query:
+        url = f"https://clinicaltrials.gov/api/query/study_fields?expr={query}&fields=NCTId,Condition,BriefTitle,StartDate,Phase&min_rnk=1&max_rnk=10&fmt=json"
+        response = requests.get(url)
+        if response.status_code == 200:
+            results = response.json()["StudyFieldsResponse"]["StudyFields"]
+            trials = pd.DataFrame(results)
+            if not trials.empty:
+                st.write(f"Showing top {len(trials)} trials for '{query}':")
+                st.dataframe(trials)
+            else:
+                st.info("No results found.")
+        else:
+            st.error("Failed to retrieve data from ClinicalTrials.gov")
