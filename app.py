@@ -100,12 +100,12 @@ elif section == "ClinicalTrials.gov Explorer":
         st.markdown(f"[Click here to view ClinicalTrials.gov results for '{query}']({search_url})")
         st.markdown("(This opens the official site in a new tab.)")
 
-# Indication-Level CRF Library
+# Indication-Level CRF Library (RTS Simulation)
 elif section == "Indication-Level CRF Library":
-    st.title("Standardized CRF Library by Indication")
+    st.title("Standardized CRF Library by Indication (RTS Simulation)")
     st.markdown("""
-    This section simulates the design of indication-specific CRF libraries using both global standards (CDISC/SDTM) and custom content.
-    Below are example CRFs for Oncology and Cardiology, along with documentation of their structure and implementation notes.
+    This section simulates the design and governance of indication-specific CRF libraries, inspired by the Roche Terminology System (RTS).
+    It illustrates how reusable data standards, therapeutic-specific extensions, and rule documentation enable structured, interoperable data capture.
     """)
 
     # Oncology CRF example
@@ -143,7 +143,11 @@ elif section == "Indication-Level CRF Library":
     st.dataframe(cardio_crf)
 
     st.markdown("""
-    ✅ These examples simulate how a CRF library can be **reused and adapted across therapeutic areas**, and how decisions can be documented clearly to support data quality, traceability, and alignment with global standards.
+    ✅ This mimics how RTS-style governance enables:
+    - Reuse of global standards across therapeutic areas
+    - Controlled extensions tailored to specific study types (e.g., Oncology)
+    - Documentation of SME input and decision rationale
+    - Machine-readable fields that can populate EDC tools, MDRs, and downstream pipelines
     """)
 
 # Terminology Compliance
