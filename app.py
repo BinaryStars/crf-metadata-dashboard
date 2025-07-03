@@ -19,6 +19,8 @@ filled_ae = pd.read_csv(DATA_DIR + "filled_crf_ae_sample.csv")
 filled_demo = pd.read_csv(DATA_DIR + "filled_crf_demographics_sample.csv")
 filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
 
+noncompliant = pd.read_csv(DATA_DIR + "filled_crf_noncompliant_sample.csv")
+
 # Mock SDTM/CDISC terminology
 controlled_terms = {
     "AEDECOD": ["HEADACHE", "NAUSEA", "FATIGUE"],
@@ -59,7 +61,7 @@ elif section == "CRF Structures":
 # Filled CRFs
 elif section == "Filled CRFs":
     st.title("Filled CRF Data")
-    tab1, tab2, tab3 = st.tabs(["Adverse Events", "Demographics", "Laboratory"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Adverse Events", "Demographics", "Laboratory", "Non-Compliant Example"])
     with tab1:
         st.subheader("Adverse Events Records")
         st.dataframe(filled_ae)
@@ -69,6 +71,9 @@ elif section == "Filled CRFs":
     with tab3:
         st.subheader("Laboratory Records")
         st.dataframe(filled_lab)
+    with tab4:
+        st.subheader("Non-Compliant Sample Records")
+        st.dataframe(noncompliant)
 
 # Metadata
 elif section == "Metadata Repository":
@@ -106,7 +111,7 @@ elif section == "Terminology Compliance":
         return pd.DataFrame()
 
     st.subheader("Check AEDECOD (Adverse Events)")
-    unmatched_ae = check_terms(filled_ae, "AEDECOD", controlled_terms["AEDECOD"])
+    unmatched_ae = check_terms(noncompliant, "AEDECOD", controlled_terms["AEDECOD"])
     if unmatched_ae.empty:
         st.success("All AEDECOD entries are compliant.")
     else:
@@ -114,7 +119,7 @@ elif section == "Terminology Compliance":
         st.dataframe(unmatched_ae[["SUBJID", "AEDECOD"]])
 
     st.subheader("Check SEX (Demographics)")
-    unmatched_sex = check_terms(filled_demo, "SEX", controlled_terms["SEX"])
+    unmatched_sex = check_terms(noncompliant, "SEX", controlled_terms["SEX"])
     if unmatched_sex.empty:
         st.success("All SEX entries are compliant.")
     else:
@@ -122,7 +127,7 @@ elif section == "Terminology Compliance":
         st.dataframe(unmatched_sex[["SUBJID", "SEX"]])
 
     st.subheader("Check LABTEST (Lab Data)")
-    unmatched_labtest = check_terms(filled_lab, "LABTEST", controlled_terms["LABTEST"])
+    unmatched_labtest = check_terms(noncompliant, "LABTEST", controlled_terms["LABTEST"])
     if unmatched_labtest.empty:
         st.success("All LABTEST entries are compliant.")
     else:
