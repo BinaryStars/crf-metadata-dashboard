@@ -1,0 +1,6 @@
+Field ID,Field Label,CDASH Variable,Data Type,Controlled Terminology,Persistent URI,Version
+AE001,Adverse Event Term,AEDECOD,Text,MedDRA v26.0,https://yourdomain.org/crf/AE001,1.0
+AE002,Start Date,AESTDTC,Date,,https://yourdomain.org/crf/AE002,1.0
+AE003,End Date,AEENDTC,Date,,https://yourdomain.org/crf/AE003,1.0
+AE004,Severity,AESEV,Coded Text,"Mild, Moderate, Severe",https://yourdomain.org/crf/AE004,1.0
+AE005,Relationship to Study Drug,AEREL,Coded Text,"Related, Not Related",https://yourdomain.org/crf/AE005,1.0

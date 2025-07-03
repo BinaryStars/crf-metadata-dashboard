@@ -1,0 +1,4 @@
+Subject ID,Lab Test Name (LBTEST),Result Value (LBORRES),Units (LBORRESU),Normal Range (LBNRIND),Collection Date (LBDTC)
+SUBJ001,Hemoglobin,13.5,g/dL,Normal,2025-06-01
+SUBJ002,Glucose,110.0,mg/dL,High,2025-06-03
+SUBJ003,Creatinine,1.2,mg/dL,Normal,2025-06-05

@@ -1,0 +1,5 @@
+Field ID,Field Label,CDASH Variable,Data Type,Controlled Terminology,Persistent URI,Version
+DM001,Date of Birth,BRTHDTC,Date,,https://yourdomain.org/crf/DM001,1.0
+DM002,Sex,SEX,Coded Text,"Male, Female, Other",https://yourdomain.org/crf/DM002,1.0
+DM003,Ethnicity,ETHNIC,Coded Text,"Hispanic or Latino, Not Hispanic or Latino",https://yourdomain.org/crf/DM003,1.0
+DM004,Race,RACE,Coded Text,"White, Black or African American, Asian, Other",https://yourdomain.org/crf/DM004,1.0

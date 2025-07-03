@@ -1,0 +1,6 @@
+Variable Name,Label,Data Type,Origin,Term Source,Permissible Values,Last Modified,Change Reason
+LBTEST,Lab Test Name,Text,CRF,LOINC,,2025-07-02,Initial Load
+LBORRES,Result Value,Numeric,CRF,,,2025-07-02,Initial Load
+LBORRESU,Units,Text,CRF,,,2025-07-02,Initial Load
+LBNRIND,Normal Range,Text,CRF,Internal Code List,"Low, Normal, High",2025-07-02,Initial Load
+LBDTC,Collection Date,Date,CRF,,,2025-07-02,Initial Load

@@ -1,0 +1,6 @@
+Variable Name,Label,Data Type,Origin,Term Source,Permissible Values,Last Modified,Change Reason
+AEDECOD,Adverse Event Term,Text,CRF,MedDRA v26.0,,2025-07-01,Initial Load
+AESTDTC,Start Date,Date,CRF,,,2025-07-01,Initial Load
+AEENDTC,End Date,Date,CRF,,,2025-07-01,Initial Load
+AESEV,Severity,Coded Text,CRF,Internal Code List,"Mild, Moderate, Severe",2025-07-01,Initial Load
+AEREL,Relationship to Study Drug,Coded Text,CRF,Internal Code List,"Related, Not Related",2025-07-01,Initial Load

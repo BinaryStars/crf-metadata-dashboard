@@ -1,0 +1,4 @@
+Subject ID,Date of Birth (BRTHDTC),Sex (SEX),Ethnicity (ETHNIC),Race (RACE)
+SUBJ001,1980-05-15,Male,Hispanic or Latino,White
+SUBJ002,1975-11-22,Female,Not Hispanic or Latino,Asian
+SUBJ003,1990-02-03,Other,Not Hispanic or Latino,Black or African American

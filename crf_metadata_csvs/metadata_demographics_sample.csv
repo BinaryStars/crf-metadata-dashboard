@@ -1,0 +1,5 @@
+Variable Name,Label,Data Type,Origin,Term Source,Permissible Values,Last Modified,Change Reason
+BRTHDTC,Date of Birth,Date,CRF,,,2025-07-02,Initial Load
+SEX,Sex,Coded Text,CRF,Internal Code List,"Male, Female, Other",2025-07-02,Initial Load
+ETHNIC,Ethnicity,Coded Text,CRF,Internal Code List,"Hispanic or Latino, Not Hispanic or Latino",2025-07-02,Initial Load
+RACE,Race,Coded Text,CRF,Internal Code List,"White, Black or African American, Asian, Other",2025-07-02,Initial Load

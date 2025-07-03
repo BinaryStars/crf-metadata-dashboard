@@ -1,0 +1,6 @@
+Field ID,Field Label,CDASH Variable,Data Type,Controlled Terminology,Persistent URI,Version
+LB001,Lab Test Name,LBTEST,Text,LOINC,https://yourdomain.org/crf/LB001,1.0
+LB002,Result Value,LBORRES,Numeric,,https://yourdomain.org/crf/LB002,1.0
+LB003,Units,LBORRESU,Text,,https://yourdomain.org/crf/LB003,1.0
+LB004,Normal Range,LBNRIND,Text,"Low, Normal, High",https://yourdomain.org/crf/LB004,1.0
+LB005,Collection Date,LBDTC,Date,,https://yourdomain.org/crf/LB005,1.0
