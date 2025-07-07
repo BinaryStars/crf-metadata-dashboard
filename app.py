@@ -157,7 +157,11 @@ elif section == "Governance Requests":
     st.markdown("Submit a change request for a CRF standard or term. Track and review governance decisions.")
     with st.form("governance_form"):
         requestor = st.text_input("Your Name")
-        domain = st.selectbox("Domain", ["AE", "DM", "LB", "Custom"])
+        domain = st.selectbox(
+    "Domain",
+    ["AE", "DM", "LB", "VS", "MH", "EX", "Custom"],
+    help="Select the clinical data domain: AE=Adverse Events, DM=Demographics, LB=Lab Tests, VS=Vital Signs, MH=Medical History, EX=Exposure."
+)
         field = st.text_input("Field Name")
         change_type = st.radio("Change Type", ["Add", "Modify", "Retire"])
         reason = st.text_area("Justification for the Change")
