@@ -36,164 +36,32 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 if section == "Overview":
     st.title("FAIR CRF & Metadata Stewardship Prototype")
     st.markdown("""
-    This dashboard simulates a clinical metadata governance framework:
-    - Standardized CRFs for Adverse Events, Demographics, and Lab Results
-    - Metadata repositories with terminology, data types, and change tracking
-    - Filled CRFs simulating study data
-        - SDTM/CDISC terminology validation to support data governance
+    This interactive dashboard simulates the work of a Biomedical Data Steward responsible for end-to-end CRF standards and governance. It demonstrates key responsibilities outlined in industry roles:
+
+    - 📋 **Design Indication-Level CRFs**: Create standardized AE, Lab, and Demographics CRFs tailored to oncology or cardiology.  
+      _Shows capability in indication-specific CRF library design aligned with CDISC/CDASH._  
+      👉 Try it: Go to the **"Indication-Level CRF Library"** tab and explore or generate a new template.
+
+    - 📚 **Metadata Repository Management**: View curated field metadata with datatype, term list, definitions, and SME decision rationale.  
+      _Supports reuse, traceability, and FAIR-compliant stewardship._  
+      👉 Try it: Open the **"Metadata Repository"** tab to inspect and search across domains.
+
+    - ✅ **Terminology Compliance Checker**: Identify and suggest fixes for non-compliant values using CDISC-controlled terms.  
+      _Enables quality checks and standard adherence across studies._  
+      👉 Try it: Use the **"Terminology Compliance"** tab to validate AEDECOD, SEX, and LABTEST values.
+
+    - 🤖 **LLM Copilot for CRFs**: Ask GPT-4 questions like "Why is AEDECOD important?" or "Suggest fields for a hypertension CRF."  
+      _Simulates expert consultation and SME hypercare support._  
+      👉 Try it: Ask a question in the **"CRF Copilot (LLM)"** tab and see instant feedback.
+
+    - 🔧 **Governance Request Tracker**: Submit and manage change requests (add, retire, or modify CRF terms).  
+      _Demonstrates oversight of CRF evolution, versioning, and governance coordination._  
+      👉 Try it: Submit a test request in the **"Governance Requests"** tab.
+
+    🧪 **Use Case Example**: You're designing a new oncology trial and want to ensure the AE CRF complies with CDISC standards, documents metadata for future reuse, and logs a new request to add a custom tumor marker field. This tool walks you through the entire workflow.
+
+    This prototype can be extended to support SME review workflows, CDISC–FHIR mappings, and metadata export to RDF or JSON-LD.
     """)
-
-# CRF Structures
-elif section == "CRF Structures":
-    st.title("CRF Templates")
-    tab1, tab2, tab3 = st.tabs(["Adverse Events", "Demographics", "Laboratory"])
-    with tab1:
-        st.subheader("Adverse Events CRF")
-        st.dataframe(crf_ae)
-    with tab2:
-        st.subheader("Demographics CRF")
-        st.dataframe(crf_demo)
-    with tab3:
-        st.subheader("Laboratory CRF")
-        st.dataframe(crf_lab)
-
-# Filled CRFs
-elif section == "Filled CRFs":
-    st.title("Filled CRF Data")
-    tab1, tab2, tab3, tab4 = st.tabs(["Adverse Events", "Demographics", "Laboratory", "Non-Compliant Example"])
-    with tab1:
-        st.subheader("Adverse Events Records")
-        st.dataframe(filled_ae)
-    with tab2:
-        st.subheader("Demographics Records")
-        st.dataframe(filled_demo)
-    with tab3:
-        st.subheader("Laboratory Records")
-        st.dataframe(filled_lab)
-    with tab4:
-        st.subheader("Non-Compliant Sample Records")
-        st.dataframe(noncompliant)
-
-# Metadata
-elif section == "Metadata Repository":
-    st.title("Metadata Repositories")
-    tab1, tab2, tab3 = st.tabs(["Adverse Events", "Demographics", "Laboratory"])
-    with tab1:
-        st.subheader("AE Metadata")
-        st.dataframe(metadata_ae)
-    with tab2:
-        st.subheader("Demographics Metadata")
-        st.dataframe(metadata_demo)
-    with tab3:
-        st.subheader("Lab Metadata")
-        st.dataframe(metadata_lab)
-
-# ClinicalTrials.gov Integration
-
-
-# Indication-Level CRF Library (RTS Simulation)
-elif section == "Indication-Level CRF Library":
-    st.title("Standardized CRF Library by Indication (RTS Simulation)")
-    st.markdown("""
-    This section simulates the design and governance of indication-specific CRF libraries, inspired by the Roche Terminology System (RTS).
-    It illustrates how reusable data standards, therapeutic-specific extensions, and rule documentation enable structured, interoperable data capture.
-    """)
-
-    # Oncology CRF example
-    st.subheader("Oncology CRF Template")
-    oncology_crf = pd.DataFrame({
-        "Field Name": ["SUBJID", "VISIT", "TUMOR_LOCATION", "TUMOR_SIZE", "RESPONSE"],
-        "Label": ["Subject ID", "Visit", "Tumor Location", "Tumor Size (cm)", "Response Assessment"],
-        "Data Type": ["String", "String", "String", "Float", "Categorical"],
-        "Controlled Terms": ["", "", "LUNG|BREAST|COLON", "", "PR|CR|SD|PD"],
-        "Implementation Notes": [
-            "Use consistent SUBJID across all domains",
-            "VISIT should align with CDASH standard",
-            "Use indication-specific tumor sites",
-            "Capture largest diameter in cm",
-            "Follow RECIST criteria for response"
-        ]
-    })
-    st.dataframe(oncology_crf)
-
-    # Cardiology CRF example
-    st.subheader("Cardiology CRF Template")
-    cardio_crf = pd.DataFrame({
-        "Field Name": ["SUBJID", "VISIT", "ECG_RESULT", "BP_SYSTOLIC", "BP_DIASTOLIC"],
-        "Label": ["Subject ID", "Visit", "ECG Result", "Systolic BP", "Diastolic BP"],
-        "Data Type": ["String", "String", "Categorical", "Integer", "Integer"],
-        "Controlled Terms": ["", "", "NORMAL|ABNORMAL", "", ""],
-        "Implementation Notes": [
-            "Subject ID must match DM domain",
-            "Standard visit labels (e.g., SCREENING, WEEK 1)",
-            "Use site cardiologist evaluation",
-            "Measured in mmHg",
-            "Measured in mmHg"
-        ]
-    })
-    st.dataframe(cardio_crf)
-
-    st.markdown("""
-    ✅ This mimics how RTS-style governance enables:
-    - Reuse of global standards across therapeutic areas
-    - Controlled extensions tailored to specific study types (e.g., Oncology)
-    - Documentation of SME input and decision rationale
-    - Machine-readable fields that can populate EDC tools, MDRs, and downstream pipelines
-    """)
-
-# CRF Copilot (LLM)
-elif section == "CRF Copilot (LLM)":
-    st.title("CRF Copilot – LLM-Powered Assistance")
-    st.markdown("""
-    Ask natural language questions about CRF standards, definitions, field purposes, or request suggestions.
-    """)
-    user_prompt = st.text_input("Ask the Copilot a question (e.g., Why is TUMOR_SIZE in oncology CRF?)")
-    if user_prompt:
-        with st.spinner("Thinking..."):
-            import openai
-            import os
-            client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-            response = client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "You are a biomedical metadata steward helping design compliant CRFs based on CDISC and FHIR."},
-                    {"role": "user", "content": user_prompt}
-                ]
-            )
-            st.markdown("**Response:**")
-            st.write(response.choices[0].message.content)
-
-# Governance Requests
-elif section == "Governance Requests":
-    st.title("CRF Standards Governance Tracker")
-    st.markdown("""
-    Submit a change request for a CRF standard or term. Track and review governance decisions.
-    """)
-    with st.form("governance_form"):
-        requestor = st.text_input("Your Name")
-        domain = st.selectbox("Domain", ["AE", "DM", "LB", "Custom"])
-        field = st.text_input("Field Name")
-        change_type = st.radio("Change Type", ["Add", "Modify", "Retire"])
-        reason = st.text_area("Justification for the Change")
-        submitted = st.form_submit_button("Submit Request")
-        if submitted:
-            st.success("Submitted! Governance team will review this request.")
-
-# Terminology Compliance
-elif section == "Terminology Compliance":
-    st.title("Terminology Compliance Check")
-    st.markdown("This tool checks whether filled CRF terms align with SDTM/CDISC controlled terminology.")
-
-    def highlight_noncompliant(val, allowed):
-        return f"color: red; font-weight: bold" if val not in allowed else ""
-
-    def show_noncompliant(df, column, allowed_terms):
-        if column in df.columns:
-            df_copy = df[["SUBJID", column]].copy()
-            suggestions = []
-
-            allowed_terms_lower = [term.lower() for term in allowed_terms]
-            allowed_term_map = dict(zip(allowed_terms_lower, allowed_terms))
 
             for val in df_copy[column]:
                 val_lower = val.lower()
