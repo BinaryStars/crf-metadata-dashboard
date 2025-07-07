@@ -102,7 +102,12 @@ elif section == "Filled CRFs":
 # Metadata Repository
 elif section == "Metadata Repository":
     st.title("CRF Metadata Repository")
-    domain = st.selectbox("Select Domain", ["AE", "DM", "LB"])
+    domain = st.selectbox(
+    "Domain",
+    ["AE", "DM", "LB", "VS", "MH", "EX", "Custom"],
+    index=0,
+    help="Select the clinical data domain: AE=Adverse Events, DM=Demographics, LB=Lab Tests, VS=Vital Signs, MH=Medical History, EX=Exposure."
+)
     if domain == "AE":
         st.dataframe(metadata_ae)
     elif domain == "DM":
@@ -156,15 +161,15 @@ elif section == "Governance Requests":
     st.title("CRF Standards Governance Tracker")
     st.markdown("Submit a change request for a CRF standard or term. Track and review governance decisions.")
     with st.form("governance_form"):
-        requestor = st.text_input("Your Name", placeholder="e.g., Dr. Jane Smith")
+        requestor = st.text_input("Your Name", placeholder="e.g., Clinical Data Steward")
         domain = st.selectbox(
     "Domain",
     ["AE", "DM", "LB", "VS", "MH", "EX", "Custom"],
     help="Select the clinical data domain: AE=Adverse Events, DM=Demographics, LB=Lab Tests, VS=Vital Signs, MH=Medical History, EX=Exposure."
 )
-        field = st.text_input("Field Name", placeholder="e.g., TUMOR_MARKER")
+        field = st.text_input("Field Name", placeholder="e.g., AESEV")
         change_type = st.radio("Change Type", ["Add", "Modify", "Retire"])
-        reason = st.text_area("Justification for the Change", placeholder="Explain why this change is needed for clinical or regulatory purposes")
+        reason = st.text_area("Justification for the Change", placeholder="e.g., AESEV is needed to capture severity in AE records for oncology patients.")
         submitted = st.form_submit_button("Submit Request")
         if submitted:
             st.success("Submitted! Governance team will review this request.")
