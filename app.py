@@ -34,7 +34,7 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 
 # Overview
 if section == "Overview":
-    st.title("FAIR CRF & Metadata Stewardship Prototype")
+    st.title("Mini Project:FAIR CRF & Metadata Stewardship Prototype")
     st.markdown("""
     This dashboard simulates a clinical metadata governance framework:
     - Standardized CRFs for Adverse Events, Demographics, and Lab Results
