@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 import urllib.parse
 import difflib
+import openai
 
 # Data directory
 DATA_DIR = "crf_metadata_csvs/"
@@ -27,6 +28,21 @@ cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
 
 def get_allowed_terms(codelist):
     return cdisc_terms_df[cdisc_terms_df["CODELIST"] == codelist]["VALUE"].dropna().unique().tolist()
+
+def show_noncompliant(df, column, allowed_values):
+    df_copy = df.copy()
+    noncompliant_values = []
+    for val in df_copy[column]:
+        if pd.isna(val):
+            continue
+        if val not in allowed_values:
+            noncompliant_values.append(val)
+    df_copy['NONCOMPLIANT'] = df_copy[column].apply(lambda x: x if x not in allowed_values else '')
+    st.dataframe(df_copy.style.applymap(lambda x: 'background-color: red' if x in noncompliant_values else ''))
+    if noncompliant_values:
+        st.warning(f"Found non-compliant values: {set(noncompliant_values)}")
+    else:
+        st.success("All values are compliant.")
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
@@ -63,4 +79,88 @@ if section == "Overview":
     This prototype can be extended to support SME review workflows, CDISC–FHIR mappings, and metadata export to RDF or JSON-LD.
     """)
 
-    
+# CRF Structures
+elif section == "CRF Structures":
+    st.title("CRF Templates by Domain")
+    st.subheader("Adverse Events CRF")
+    st.dataframe(crf_ae)
+    st.subheader("Demographics CRF")
+    st.dataframe(crf_demo)
+    st.subheader("Lab CRF")
+    st.dataframe(crf_lab)
+
+# Filled CRFs
+elif section == "Filled CRFs":
+    st.title("Sample Completed CRFs")
+    st.subheader("Adverse Events")
+    st.dataframe(filled_ae)
+    st.subheader("Demographics")
+    st.dataframe(filled_demo)
+    st.subheader("Lab Tests")
+    st.dataframe(filled_lab)
+
+# Metadata Repository
+elif section == "Metadata Repository":
+    st.title("CRF Metadata Repository")
+    domain = st.selectbox("Select Domain", ["AE", "DM", "LB"])
+    if domain == "AE":
+        st.dataframe(metadata_ae)
+    elif domain == "DM":
+        st.dataframe(metadata_demo)
+    elif domain == "LB":
+        st.dataframe(metadata_lab)
+
+# Terminology Compliance
+elif section == "Terminology Compliance":
+    st.title("Terminology Compliance Checker")
+    st.subheader("Check AEDECOD (Adverse Events)")
+    unmatched_ae = noncompliant["AEDECOD"].dropna()
+    show_noncompliant(noncompliant, "AEDECOD", get_allowed_terms("AEDECOD"))
+
+    st.subheader("Check SEX (Demographics)")
+    show_noncompliant(noncompliant, "SEX", get_allowed_terms("SEX"))
+
+    st.subheader("Check LABTEST (Lab Tests)")
+    show_noncompliant(noncompliant, "LABTEST", get_allowed_terms("LABTEST"))
+
+# Indication-Level CRF Library
+elif section == "Indication-Level CRF Library":
+    st.title("Indication-Level CRF Library")
+    indication = st.selectbox("Select Indication", ["Oncology", "Cardiology"])
+    if indication == "Oncology":
+        st.write("Example Oncology AE CRF")
+        st.dataframe(crf_ae)
+    elif indication == "Cardiology":
+        st.write("Example Cardiology Demographics CRF")
+        st.dataframe(crf_demo)
+
+# CRF Copilot (LLM)
+elif section == "CRF Copilot (LLM)":
+    st.title("CRF Copilot – LLM-Powered Assistance")
+    user_prompt = st.text_input("Ask the Copilot a question (e.g., Why is AEDECOD used?)")
+    if user_prompt:
+        with st.spinner("Thinking..."):
+            client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+            response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": "You are a biomedical metadata steward helping design compliant CRFs based on CDISC and FHIR."},
+                    {"role": "user", "content": user_prompt}
+                ]
+            )
+            st.markdown("**Response:**")
+            st.write(response.choices[0].message.content)
+
+# Governance Requests
+elif section == "Governance Requests":
+    st.title("CRF Standards Governance Tracker")
+    st.markdown("Submit a change request for a CRF standard or term. Track and review governance decisions.")
+    with st.form("governance_form"):
+        requestor = st.text_input("Your Name")
+        domain = st.selectbox("Domain", ["AE", "DM", "LB", "Custom"])
+        field = st.text_input("Field Name")
+        change_type = st.radio("Change Type", ["Add", "Modify", "Retire"])
+        reason = st.text_area("Justification for the Change")
+        submitted = st.form_submit_button("Submit Request")
+        if submitted:
+            st.success("Submitted! Governance team will review this request.")
