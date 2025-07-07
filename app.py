@@ -30,7 +30,7 @@ def get_allowed_terms(codelist):
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
-section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer", "Terminology Compliance", "Indication-Level CRF Library"])
+section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer", "Terminology Compliance", "Indication-Level CRF Library", "CRF Copilot (LLM)", "Governance Requests"])
 
 # Overview
 if section == "Overview":
@@ -149,6 +149,44 @@ elif section == "Indication-Level CRF Library":
     - Documentation of SME input and decision rationale
     - Machine-readable fields that can populate EDC tools, MDRs, and downstream pipelines
     """)
+
+# CRF Copilot (LLM)
+elif section == "CRF Copilot (LLM)":
+    st.title("CRF Copilot – LLM-Powered Assistance")
+    st.markdown("""
+    Ask natural language questions about CRF standards, definitions, field purposes, or request suggestions.
+    """)
+    user_prompt = st.text_input("Ask the Copilot a question (e.g., Why is TUMOR_SIZE in oncology CRF?)")
+    if user_prompt:
+        with st.spinner("Thinking..."):
+            import openai
+            import os
+            openai.api_key = st.secrets["OPENAI_API_KEY"]
+            response = openai.ChatCompletion.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": "You are a biomedical metadata steward helping design compliant CRFs based on CDISC and FHIR."},
+                    {"role": "user", "content": user_prompt}
+                ]
+            )
+            st.markdown("**Response:**")
+            st.write(response.choices[0].message.content)
+
+# Governance Requests
+elif section == "Governance Requests":
+    st.title("CRF Standards Governance Tracker")
+    st.markdown("""
+    Submit a change request for a CRF standard or term. Track and review governance decisions.
+    """)
+    with st.form("governance_form"):
+        requestor = st.text_input("Your Name")
+        domain = st.selectbox("Domain", ["AE", "DM", "LB", "Custom"])
+        field = st.text_input("Field Name")
+        change_type = st.radio("Change Type", ["Add", "Modify", "Retire"])
+        reason = st.text_area("Justification for the Change")
+        submitted = st.form_submit_button("Submit Request")
+        if submitted:
+            st.success("Submitted! Governance team will review this request.")
 
 # Terminology Compliance
 elif section == "Terminology Compliance":
