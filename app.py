@@ -34,7 +34,7 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 
 # Overview
 if section == "Overview":
-    st.title("Mini Project:FAIR CRF & Metadata Stewardship Prototype")
+    st.title("FAIR CRF & Metadata Stewardship Prototype")
     st.markdown("""
     This dashboard simulates a clinical metadata governance framework:
     - Standardized CRFs for Adverse Events, Demographics, and Lab Results
@@ -161,8 +161,8 @@ elif section == "CRF Copilot (LLM)":
         with st.spinner("Thinking..."):
             import openai
             import os
-            openai.api_key = st.secrets["OPENAI_API_KEY"]
-            response = openai.ChatCompletion.create(
+            client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+            response = client.chat.completions.create(
                 model="gpt-4",
                 messages=[
                     {"role": "system", "content": "You are a biomedical metadata steward helping design compliant CRFs based on CDISC and FHIR."},
