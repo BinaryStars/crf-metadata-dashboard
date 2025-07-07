@@ -156,15 +156,15 @@ elif section == "Governance Requests":
     st.title("CRF Standards Governance Tracker")
     st.markdown("Submit a change request for a CRF standard or term. Track and review governance decisions.")
     with st.form("governance_form"):
-        requestor = st.text_input("Your Name")
+        requestor = st.text_input("Your Name", placeholder="e.g., Dr. Jane Smith")
         domain = st.selectbox(
     "Domain",
     ["AE", "DM", "LB", "VS", "MH", "EX", "Custom"],
     help="Select the clinical data domain: AE=Adverse Events, DM=Demographics, LB=Lab Tests, VS=Vital Signs, MH=Medical History, EX=Exposure."
 )
-        field = st.text_input("Field Name")
+        field = st.text_input("Field Name", placeholder="e.g., TUMOR_MARKER")
         change_type = st.radio("Change Type", ["Add", "Modify", "Retire"])
-        reason = st.text_area("Justification for the Change")
+        reason = st.text_area("Justification for the Change", placeholder="Explain why this change is needed for clinical or regulatory purposes")
         submitted = st.form_submit_button("Submit Request")
         if submitted:
             st.success("Submitted! Governance team will review this request.")
