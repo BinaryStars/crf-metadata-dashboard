@@ -62,7 +62,6 @@ This dashboard demonstrates key CRF data stewardship responsibilities:
 
 Navigate tabs to explore each function.
 """)
-    """)
 
 # CRF Structures
 elif section == "CRF Structures":
