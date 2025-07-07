@@ -52,31 +52,16 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 if section == "Overview":
     st.title("FAIR CRF & Metadata Stewardship Prototype")
     st.markdown("""
-    This interactive dashboard simulates the work of a Biomedical Data Steward responsible for end-to-end CRF standards and governance. It demonstrates key responsibilities outlined in industry roles:
+This dashboard demonstrates key CRF data stewardship responsibilities:
 
-    - **Design Indication-Level CRFs**: Create standardized AE, Lab, and Demographics CRFs tailored to oncology or cardiology.  
-      _Shows capability in indication-specific CRF library design aligned with CDISC/CDASH._  
-      👉 Try it: Go to the **"Indication-Level CRF Library"** tab and explore or generate a new template.
+- **Design CRF Templates** for domains like AE, Demographics, and Lab Tests
+- **Check Terminology Compliance** using CDISC-controlled terms
+- **Curate Metadata** with SME decisions and implementation rules
+- **Submit Governance Requests** for new fields or standards updates
+- **Use LLM Copilot** for expert support on CRF standards
 
-    - **Metadata Repository Management**: View curated field metadata with datatype, term list, definitions, and SME decision rationale.  
-      _Supports reuse, traceability, and FAIR-compliant stewardship._  
-      👉 Try it: Open the **"Metadata Repository"** tab to inspect and search across domains.
-
-    - **Terminology Compliance Checker**: Identify and suggest fixes for non-compliant values using CDISC-controlled terms.  
-      _Enables quality checks and standard adherence across studies._  
-      👉 Try it: Use the **"Terminology Compliance"** tab to validate AEDECOD, SEX, and LABTEST values.
-
-    - **LLM Copilot for CRFs**: Ask GPT-4 questions like "Why is AEDECOD important?" or "Suggest fields for a hypertension CRF."  
-      _Simulates expert consultation and SME hypercare support._  
-      👉 Try it: Ask a question in the **"CRF Copilot (LLM)"** tab and see instant feedback.
-
-    - **Governance Request Tracker**: Submit and manage change requests (add, retire, or modify CRF terms).  
-      _Demonstrates oversight of CRF evolution, versioning, and governance coordination._  
-      👉 Try it: Submit a test request in the **"Governance Requests"** tab.
-
-    **Use Case Example**: You're designing a new oncology trial and want to ensure the AE CRF complies with CDISC standards, documents metadata for future reuse, and logs a new request to add a custom tumor marker field. This tool walks you through the entire workflow.
-
-    This prototype can be extended to support SME review workflows, CDISC–FHIR mappings, and metadata export to RDF or JSON-LD.
+Navigate tabs to explore each function.
+""")
     """)
 
 # CRF Structures
