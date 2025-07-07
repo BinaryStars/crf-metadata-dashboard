@@ -63,18 +63,6 @@ if section == "Overview":
     This prototype can be extended to support SME review workflows, CDISC–FHIR mappings, and metadata export to RDF or JSON-LD.
     """)
 
-            for val in df_copy[column]:
-                val_lower = val.lower()
-                matches = difflib.get_close_matches(val_lower, allowed_terms_lower, n=1, cutoff=0.3)
-                if matches:
-                    suggestions.append(allowed_term_map[matches[0]])
-                else:
-                    suggestions.append("(no suggestion)")
-
-            df_copy["Suggested Correction"] = suggestions
-            styled = df_copy.style.applymap(lambda v: highlight_noncompliant(v, allowed_terms), subset=[column])
-            st.dataframe(styled)
-
     st.subheader("Check AEDECOD (Adverse Events)")
     unmatched_ae = noncompliant[~noncompliant["AEDECOD"].isin(get_allowed_terms("AEDECOD"))]
     if unmatched_ae.empty:
