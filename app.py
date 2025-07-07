@@ -30,7 +30,7 @@ def get_allowed_terms(codelist):
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
-section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "ClinicalTrials.gov Explorer", "Terminology Compliance", "Indication-Level CRF Library", "CRF Copilot (LLM)", "Governance Requests"])
+section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "Terminology Compliance", "Indication-Level CRF Library", "CRF Copilot (LLM)", "Governance Requests"])
 
 # Overview
 if section == "Overview":
@@ -40,8 +40,7 @@ if section == "Overview":
     - Standardized CRFs for Adverse Events, Demographics, and Lab Results
     - Metadata repositories with terminology, data types, and change tracking
     - Filled CRFs simulating study data
-    - Integration with ClinicalTrials.gov for external metadata alignment
-    - SDTM/CDISC terminology validation to support data governance
+        - SDTM/CDISC terminology validation to support data governance
     """)
 
 # CRF Structures
@@ -90,15 +89,7 @@ elif section == "Metadata Repository":
         st.dataframe(metadata_lab)
 
 # ClinicalTrials.gov Integration
-elif section == "ClinicalTrials.gov Explorer":
-    st.title("ClinicalTrials.gov Metadata Explorer")
-    st.markdown("Search trials to cross-reference CRF content with real-world study metadata.")
 
-    query = st.text_input("Search ClinicalTrials.gov (e.g., diabetes, COVID-19, oncology):")
-    if query:
-        search_url = f"https://clinicaltrials.gov/search?cond={urllib.parse.quote(query)}"
-        st.markdown(f"[Click here to view ClinicalTrials.gov results for '{query}']({search_url})")
-        st.markdown("(This opens the official site in a new tab.)")
 
 # Indication-Level CRF Library (RTS Simulation)
 elif section == "Indication-Level CRF Library":
