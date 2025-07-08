@@ -8,7 +8,7 @@ import openai
 # Data directory
 DATA_DIR = "crf_metadata_csvs/"
 
-# Load data
+# Load csv files
 crf_ae = pd.read_csv(DATA_DIR + "crf_ae_sample.csv")
 crf_demo = pd.read_csv(DATA_DIR + "crf_demographics_sample.csv")
 crf_lab = pd.read_csv(DATA_DIR + "crf_lab_sample.csv")
@@ -20,10 +20,10 @@ metadata_lab = pd.read_csv(DATA_DIR + "metadata_lab_sample.csv")
 filled_ae = pd.read_csv(DATA_DIR + "filled_crf_ae_sample.csv")
 filled_demo = pd.read_csv(DATA_DIR + "filled_crf_demographics_sample.csv")
 filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
-
+#sample file with non-complient terms
 noncompliant = pd.read_csv(DATA_DIR + "filled_crf_noncompliant_sample.csv")
 
-# Load full CDISC terminology
+# Load partial CDISC terminology
 cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
 
 def get_allowed_terms(codelist):
@@ -54,11 +54,11 @@ if section == "Overview":
     st.markdown("""
 This dashboard demonstrates key CRF data stewardship responsibilities:
 
-- **Design CRF Templates** for domains like AE, Demographics, and Lab Tests
+- **Design CRF Templates** for domains like Adverse Events, Demographics, and Lab Tests
 - **Check Terminology Compliance** using CDISC-controlled terms
 - **Curate Metadata** with SME decisions and implementation rules
-- **Submit Governance Requests** for new fields or standards updates
 - **Use LLM Copilot** for expert support on CRF standards
+- **Submit Governance Requests** for new fields or standards updates
 
 Navigate tabs to explore each function.
 """)
