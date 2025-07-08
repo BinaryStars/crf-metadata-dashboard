@@ -8,26 +8,38 @@ import openai
 # Data directory
 DATA_DIR = "crf_metadata_csvs/"
 
-# Load csv files
-crf_ae = pd.read_csv(DATA_DIR + "crf_ae_sample.csv")
-crf_demo = pd.read_csv(DATA_DIR + "crf_demographics_sample.csv")
-crf_lab = pd.read_csv(DATA_DIR + "crf_lab_sample.csv")
+# Load data
+try:
+    crf_ae = pd.read_csv(DATA_DIR + "crf_ae_sample.csv")
+    crf_demo = pd.read_csv(DATA_DIR + "crf_demographics_sample.csv")
+    crf_lab = pd.read_csv(DATA_DIR + "crf_lab_sample.csv")
 
-metadata_ae = pd.read_csv(DATA_DIR + "metadata_repository_sample.csv")
-metadata_demo = pd.read_csv(DATA_DIR + "metadata_demographics_sample.csv")
-metadata_lab = pd.read_csv(DATA_DIR + "metadata_lab_sample.csv")
+    metadata_ae = pd.read_csv(DATA_DIR + "metadata_repository_sample.csv")
+    metadata_demo = pd.read_csv(DATA_DIR + "metadata_demographics_sample.csv")
+    metadata_lab = pd.read_csv(DATA_DIR + "metadata_lab_sample.csv")
 
-filled_ae = pd.read_csv(DATA_DIR + "filled_crf_ae_sample.csv")
-filled_demo = pd.read_csv(DATA_DIR + "filled_crf_demographics_sample.csv")
-filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
-#sample file with non-complient terms
-noncompliant = pd.read_csv(DATA_DIR + "filled_crf_noncompliant_sample.csv")
+    filled_ae = pd.read_csv(DATA_DIR + "filled_crf_ae_sample.csv")
+    filled_demo = pd.read_csv(DATA_DIR + "filled_crf_demographics_sample.csv")
+    filled_lab = pd.read_csv(DATA_DIR + "filled_crf_lab_sample.csv")
+
+    noncompliant = pd.read_csv(DATA_DIR + "filled_crf_noncompliant_sample.csv")
+
+    cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
+except FileNotFoundError as e:
+    st.error(f"Required file not found: {e.filename}. Please verify that all data files are in the correct location.")
+    st.stop()
 
 # Load partial CDISC terminology
 cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
 
 def get_allowed_terms(codelist):
-    return cdisc_terms_df[cdisc_terms_df["CODELIST"] == codelist]["VALUE"].dropna().unique().tolist()
+    if cdisc_terms_df.empty:
+        st.warning("CDISC terminology file is empty. Please verify the file contents.")
+        return []
+    terms = cdisc_terms_df[cdisc_terms_df["CODELIST"] == codelist]["VALUE"].dropna().unique().tolist()
+    if not terms:
+        st.warning(f"No controlled terms found for CODELIST='{codelist}'.")
+    return terms
 
 def show_noncompliant(df, column, allowed_values):
     df_copy = df.copy()
@@ -50,11 +62,11 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 
 # Overview
 if section == "Overview":
-    st.title("FAIR CRF & Metadata Stewardship Prototype")
+    st.title("FAIR CRF & Metadata Stewardship Prototype – by Shima Dastgheib")
     st.markdown("""
 This dashboard demonstrates key CRF data stewardship responsibilities:
 
-- **Design CRF Templates** for domains like Adverse Events, Demographics, and Lab Tests
+- **Design CRF Templates** for domains like AE, Demographics, and Lab Tests
 - **Check Terminology Compliance** using CDISC-controlled terms
 - **Curate Metadata** with SME decisions and implementation rules
 - **Use LLM Copilot** for expert support on CRF standards
@@ -126,10 +138,15 @@ elif section == "Indication-Level CRF Library":
 # CRF Copilot (LLM)
 elif section == "CRF Copilot (LLM)":
     st.title("CRF Copilot – LLM-Powered Assistance")
-    user_prompt = st.text_input("Ask the Copilot a question (e.g., Why is AEDECOD used?)")
+    user_prompt = st.text_input("Ask the Copilot a question (e.g., What metadata should I define for AESEV in an oncology CRF?)")
     if user_prompt:
         with st.spinner("Thinking..."):
-            client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+            try:
+                api_key = st.secrets["OPENAI_API_KEY"]
+            except KeyError:
+                st.error("OpenAI API key not found. Please add OPENAI_API_KEY to your Streamlit secrets.")
+                st.stop()
+            client = openai.OpenAI(api_key=api_key)
             response = client.chat.completions.create(
                 model="gpt-4",
                 messages=[
