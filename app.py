@@ -62,7 +62,7 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 
 # Overview
 if section == "Overview":
-    st.title("FAIR CRF & Metadata Stewardship Prototype – by Shima Dastgheib")
+    st.title("FAIR Data Stewardship Prototype – by Shima Dastgheib")
     st.markdown("""
 This dashboard demonstrates key CRF data stewardship responsibilities:
 
