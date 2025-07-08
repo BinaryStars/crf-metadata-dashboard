@@ -129,7 +129,6 @@ elif section == "Terminology Compliance":
     st.subheader("Check LABTEST (Lab Tests)")
     show_noncompliant(noncompliant, "LABTEST", get_allowed_terms("LABTEST"))
 
-# Indication-Level CRF Library
 elif section == "Indication-Level CRF Library":
     st.title("Indication-Level CRF Library")
 
@@ -138,14 +137,17 @@ elif section == "Indication-Level CRF Library":
     if indication == "Oncology":
         st.subheader("Oncology-specific AE CRF")
         st.markdown("Includes AE severity and treatment-related fields used in oncology trials.")
-        oncology_ae = crf_ae.copy()
-        if "AESEV" not in oncology_ae.columns:
-            oncology_ae["AESEV"] = "MILD"  # Example default
+        oncology_ae = pd.DataFrame({
+            "AEDECOD": ["Fatigue", "Nausea", "Neutropenia"],
+            "AESTDTC": ["2025-07-01", "2025-07-03", "2025-07-05"],
+            "AESEV": ["MILD", "MODERATE", "SEVERE"],
+            "AEREL": ["RELATED", "POSSIBLY RELATED", "RELATED"]
+        })
         st.dataframe(oncology_ae)
 
     elif indication == "Cardiology":
         st.subheader("Cardiology-specific Vital Signs CRF")
-        st.markdown("Captures blood pressure, heart rate, and related vitals relevant to cardiology.")
+        st.markdown("Captures blood pressure, heart rate, and other vitals relevant to cardiology.")
         cardiology_vs = pd.DataFrame({
             "VSDTC": ["2025-07-01"],
             "VSORRES": [120],
