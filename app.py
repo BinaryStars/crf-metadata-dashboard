@@ -62,7 +62,7 @@ def show_noncompliant(df, column, allowed_values):
 
 # Sidebar navigation
 st.sidebar.title("CRF Metadata Dashboard")
-section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "Terminology Compliance", "Indication-Level CRF Library", "CRF Copilot (LLM)", "Governance Requests"])
+section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Filled CRFs", "Metadata Repository", "Terminology Compliance", "Indication-Level CRF (in progress)", "CRF Copilot (LLM)", "Governance Requests"])
 
 # Overview
 if section == "Overview":
@@ -130,7 +130,7 @@ elif section == "Terminology Compliance":
     show_noncompliant(noncompliant, "LABTEST", get_allowed_terms("LABTEST"))
 
 elif section == "Indication-Level CRF Library":
-    st.title("Indication-Level CRF Library")
+    st.title("Indication-Level CRF Library (Work in progress!)")
 
     indication = st.selectbox("Select Indication", ["Oncology", "Cardiology"])
 
