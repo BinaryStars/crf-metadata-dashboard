@@ -29,6 +29,11 @@ except FileNotFoundError as e:
     st.error(f"Required file not found: {e.filename}. Please verify that all data files are in the correct location.")
     st.stop()
 
+
+# Footer
+st.markdown("---")
+st.caption("Dashboard created by Shima Dastgheib")
+
 # Load partial CDISC terminology
 cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
 
@@ -62,7 +67,7 @@ section = st.sidebar.radio("Select Section", ["Overview", "CRF Structures", "Fil
 
 # Overview
 if section == "Overview":
-    st.title("FAIR Data Stewardship Prototype – by Shima Dastgheib")
+    st.title("FAIR Data Stewardship Prototype")
     st.markdown("""
 This dashboard demonstrates key CRF data stewardship responsibilities:
 
