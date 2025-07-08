@@ -29,6 +29,9 @@ except FileNotFoundError as e:
     st.error(f"Required file not found: {e.filename}. Please verify that all data files are in the correct location.")
     st.stop()
 
+# Footer
+st.markdown("---")
+st.caption("Dashboard created by Shima Dastgheib | [LinkedIn](https://www.linkedin.com/in/shima-dastgheib) | [GitHub](https://github.com/BinaryStars/crf-metadata-dashboard)")
 
 # Load partial CDISC terminology
 cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
@@ -77,9 +80,6 @@ Navigate tabs to explore each function.
 """)
 
 
-# Footer
-st.markdown("---")
-st.caption("Dashboard created by Shima Dastgheib | [LinkedIn](https://www.linkedin.com/in/shima-dastgheib) | [GitHub](https://github.com/BinaryStars/crf-metadata-dashboard)")
 # CRF Structures
 elif section == "CRF Structures":
     st.title("CRF Templates by Domain")
