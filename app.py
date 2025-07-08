@@ -30,10 +30,6 @@ except FileNotFoundError as e:
     st.stop()
 
 
-# Footer
-st.markdown("---")
-st.caption("Dashboard created by Shima Dastgheib")
-
 # Load partial CDISC terminology
 cdisc_terms_df = pd.read_csv(DATA_DIR + "cdisc_terminology.csv")
 
@@ -79,6 +75,11 @@ This dashboard demonstrates key CRF data stewardship responsibilities:
 
 Navigate tabs to explore each function.
 """)
+
+
+# Footer
+st.markdown("---")
+st.caption("Dashboard created by Shima Dastgheib | [LinkedIn](https://www.linkedin.com/in/shima-dastgheib) | [GitHub](https://github.com/BinaryStars/crf-metadata-dashboard)")
 
 # CRF Structures
 elif section == "CRF Structures":
