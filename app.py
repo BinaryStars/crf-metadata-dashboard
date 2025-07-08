@@ -132,13 +132,28 @@ elif section == "Terminology Compliance":
 # Indication-Level CRF Library
 elif section == "Indication-Level CRF Library":
     st.title("Indication-Level CRF Library")
+
     indication = st.selectbox("Select Indication", ["Oncology", "Cardiology"])
+
     if indication == "Oncology":
-        st.write("Example Oncology AE CRF")
-        st.dataframe(crf_ae)
+        st.subheader("Oncology-specific AE CRF")
+        st.markdown("Includes AE severity and treatment-related fields used in oncology trials.")
+        oncology_ae = crf_ae.copy()
+        if "AESEV" not in oncology_ae.columns:
+            oncology_ae["AESEV"] = "MILD"  # Example default
+        st.dataframe(oncology_ae)
+
     elif indication == "Cardiology":
-        st.write("Example Cardiology Demographics CRF")
-        st.dataframe(crf_demo)
+        st.subheader("Cardiology-specific Vital Signs CRF")
+        st.markdown("Captures blood pressure, heart rate, and related vitals relevant to cardiology.")
+        cardiology_vs = pd.DataFrame({
+            "VSDTC": ["2025-07-01"],
+            "VSORRES": [120],
+            "VSTEST": ["Systolic Blood Pressure"],
+            "VSUNIT": ["mmHg"]
+        })
+        st.dataframe(cardiology_vs)
+
 
 # CRF Copilot (LLM)
 elif section == "CRF Copilot (LLM)":
