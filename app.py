@@ -130,7 +130,7 @@ elif section == "Terminology Compliance":
     show_noncompliant(noncompliant, "LABTEST", get_allowed_terms("LABTEST"))
 
 elif section == "Indication-Level CRF Library":
-    st.title("Indication-Level CRF Library (Work in progress!)")
+    st.title("Indication-Level CRF (in progress)")
 
     indication = st.selectbox("Select Indication", ["Oncology", "Cardiology"])
 
