@@ -80,7 +80,6 @@ Navigate tabs to explore each function.
 # Footer
 st.markdown("---")
 st.caption("Dashboard created by Shima Dastgheib | [LinkedIn](https://www.linkedin.com/in/shima-dastgheib) | [GitHub](https://github.com/BinaryStars/crf-metadata-dashboard)")
-
 # CRF Structures
 elif section == "CRF Structures":
     st.title("CRF Templates by Domain")
