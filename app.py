@@ -129,8 +129,8 @@ elif section == "Terminology Compliance":
     st.subheader("Check LABTEST (Lab Tests)")
     show_noncompliant(noncompliant, "LABTEST", get_allowed_terms("LABTEST"))
 
-elif section == "Indication-Level CRF Library":
-    st.title("Indication-Level CRF (in progress)")
+elif section == "Indication-Level CRF (in progress)":
+    st.title("Indication-Level CRF (work in progress)")
 
     indication = st.selectbox("Select Indication", ["Oncology", "Cardiology"])
 
