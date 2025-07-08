@@ -1,6 +1,6 @@
 # FAIR CRF & Metadata Stewardship Prototype
 
-This Streamlit dashboard demonstrates a prototype system for managing **Case Report Forms (CRFs)** and **clinical metadata** aligned with **FAIR principles**, **CDISC standards**, and **data governance responsibilities**—designed as a mini-project for the *Biomedical Data Stewardship Manager* role at Amgen.
+This Streamlit dashboard demonstrates a prototype system for managing **Case Report Forms (CRFs)** and **clinical metadata** aligned with **FAIR principles**, **CDISC standards**, and **data governance responsibilities**
 
 ## 🔍 Features
 
@@ -44,6 +44,10 @@ OPENAI_API_KEY = "your_openai_api_key"
 
 Hosted on Streamlit Cloud:
 👉 [Try the dashboard](https://crf-metadata-dashboard-7nr7eakvhrc2qe8xuvesgb.streamlit.app)
+
+⚠️ Disclaimer
+
+This prototype is intended for demonstration purposes only. It is not a validated clinical system and may not reflect the complexity of real-world CRF standards. Clinical data standards require expert domain knowledge and regulatory oversight.
 
 ## 👩‍💼 Author
 
